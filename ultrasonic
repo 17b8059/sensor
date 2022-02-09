@@ -1,0 +1,47 @@
+//mode 0 is default mode with no jumpers or resistors
+//Define connections to sensor
+#define TRIGPIN 3
+#define ECHOPIN 4
+
+//floats to calculate distance
+float duration, distance;
+
+void setup() {
+  //set up serial monitor
+  Serial.begin(115200);
+
+  //set pinmodes for sensor connections
+  pinMode(ECHOPIN, INPUT);
+  pinMode(TRIGPIN, OUTPUT);
+}
+
+void loop() {
+  // set the trigger pin low for 2uS
+  digitalWrite(TRIGPIN, LOW);
+  delayMicroseconds(2);
+
+  //set the trigger pin HIGH for 20uS (minimum pulse) to send pulse
+  digitalWrite(TRIGPIN, HIGH);
+  delayMicroseconds(20);
+
+  //return the trigger pin to LOW
+  digitalWrite(TRIGPIN, LOW);
+
+  //measure the width of the incoming pulse
+  duration = pulseIn(ECHOPIN, HIGH);
+
+  //determine ditance from duration
+  //use 343 metres per second as speed of the sound
+  //divide by 1000 as we want millimeters
+
+  distance = (duration/2)*0.343;
+
+  //print result to serial monitor
+  Serial.print("distance: ");
+  Serial.print(distance);
+  Serial.println(" mm");
+
+  //delay before repeating measurement
+  delay(500);
+
+}
